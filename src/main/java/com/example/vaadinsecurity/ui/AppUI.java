@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Theme("apptheme")
-@SpringUI(path = "/app")
+@SpringUI(path = "/")
 public class AppUI extends UI {
 
     private VerticalLayout root;
@@ -42,17 +42,18 @@ public class AppUI extends UI {
 
     private void addHeader() {
         Button logoutButton = new Button("Выйти");
-//        logoutButton.addClickListener(); // TODO: 11.10.2017 implement logout
+        logoutButton.setStyleName(ValoTheme.BUTTON_DANGER);
+        logoutButton.addClickListener(event -> {
+                UI ui = getUI();
+                ui.getSession().getSession().invalidate();
+                ui.getPage().reload();
+        });
+        HorizontalLayout buttonDiv = new HorizontalLayout(logoutButton);
+        buttonDiv.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+        buttonDiv.setWidth("100%");
         Label label = new Label("БАЗА ДАННЫХ ПОСТАВЩИКОВ ПРОДУКТОВ ПИТАНИЯ");
         label.addStyleName(ValoTheme.LABEL_H1);
-        label.setSizeFull();
-        VerticalLayout headerDiv = new VerticalLayout();
-        headerDiv.addComponents(logoutButton, label);
-        headerDiv.setWidth("100%");
-        headerDiv.setExpandRatio(label, 1);
-        headerDiv.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        headerDiv.setId("headerDiv");
-        root.addComponents(headerDiv);
+        root.addComponents(label, buttonDiv);
     }
 
     private enum TYPE {
